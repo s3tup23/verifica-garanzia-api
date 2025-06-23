@@ -19,7 +19,8 @@ export default async function handler(req, res) {
   const shop = "verticalgolf.myshopify.com";
   const token = process.env.SHOPIFY_API_TOKEN;
 
-  const response = await fetch(`https://${shop}/admin/api/2024-01/orders.json?name=%23${order_number}`, {
+  const response = await fetch(`https://${shop}/admin/api/2024-01/orders.json?name=%23${order_number}&status=any`, {
+
     headers: {
       "X-Shopify-Access-Token": token,
       "Content-Type": "application/json"
