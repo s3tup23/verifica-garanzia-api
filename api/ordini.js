@@ -11,25 +11,27 @@ export default async function handler(req, res) {
     return res.status(405).json({ error: 'Metodo non consentito' });
   }
 
-  const { order_number, email } = req.body;
-  if (!order_number || !email) {
+  const { order_id, email } = req.body;
+  if (!order_id || !email) {
     return res.status(400).json({ error: 'Parametri mancanti' });
   }
 
   const shop = "verticalgolf.myshopify.com";
   const token = process.env.SHOPIFY_API_TOKEN;
 
-  const response = await fetch(`https://${shop}/admin/api/2024-01/orders.json?order_number=${order_number}&status=any`, {
-
-
+  const response = await fetch(`https://${shop}/admin/api/2024-01/orders/${order_id}.json`, {
     headers: {
       "X-Shopify-Access-Token": token,
       "Content-Type": "application/json"
     }
   });
 
+  if (!response.ok) {
+    return res.status(response.status).json({ error: "Errore Shopify: " + response.statusText });
+  }
+
   const data = await response.json();
-  const ordine = data.orders && data.orders[0];
+  const ordine = data.order;
 
   if (!ordine) {
     return res.status(404).json({ error: 'Ordine non trovato' });
