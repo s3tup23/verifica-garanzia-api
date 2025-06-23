@@ -1,0 +1,9 @@
+{
+  "version": 2,
+  "builds": [
+    { "src": "api/ordini.js", "use": "@vercel/node" }
+  ],
+  "routes": [
+    { "src": "/api/ordini", "dest": "api/ordini.js" }
+  ]
+}
