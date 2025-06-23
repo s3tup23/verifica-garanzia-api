@@ -1,4 +1,12 @@
 export default async function handler(req, res) {
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+
+  if (req.method === 'OPTIONS') {
+    return res.status(200).end(); // Preflight CORS OK
+  }
+
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Metodo non consentito' });
   }
@@ -8,7 +16,7 @@ export default async function handler(req, res) {
     return res.status(400).json({ error: 'Parametri mancanti' });
   }
 
-  const shop = "verticalgolf.myshopify.com"; // Cambia se necessario
+  const shop = "verticalgolf.myshopify.com";
   const token = process.env.SHOPIFY_API_TOKEN;
 
   const response = await fetch(`https://${shop}/admin/api/2024-01/orders.json?name=%23${order_number}`, {
